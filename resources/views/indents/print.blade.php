@@ -1,0 +1,4 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:DejaVu Sans;font-size:12px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #999;padding:6px;text-align:left}</style></head><body>
+<h2>Indent {{ $indent->indent_no }}</h2><p>Department: {{ $indent->department->department_name ?? '-' }} | Requested by: {{ $indent->requestedBy->name ?? '-' }} | Status: {{ $indent->status->value }}</p>
+<table><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Estimated Price</th><th>Total</th></tr></thead><tbody>@foreach($indent->items as $item)<tr><td>{{ $item->item_name }}</td><td>{{ $item->quantity }}</td><td>{{ $item->unit }}</td><td>{{ number_format($item->estimated_price,2) }}</td><td>{{ number_format($item->total_amount,2) }}</td></tr>@endforeach</tbody></table>
+</body></html>
