@@ -1,0 +1,378 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "slug": "dashboard",
+      "icon": "menu-icon icon-base bx bx-home-circle",
+      "permission": "dashboard:view"
+    },
+    {
+      "name": "Asset",
+      "icon": "menu-icon icon-base bx bx-laptop",
+      "slug": [
+        "asset",
+        "asset.depreciation",
+        "dashboard.asset"
+      ],
+      "submenu": [
+        {
+          "url": "/asset",
+          "name": "Asset",
+          "slug": "asset",
+          "icon": "menu-icon icon-base bx bx-cart-alt"
+        },
+        {
+          "url": "/asset-depreciation",
+          "name": "Asset Depreciation",
+          "slug": "asset.depreciation",
+          "icon": "menu-icon icon-base bx bx-time-five"
+        },
+        {
+          "url": "/dashboard/asset",
+          "name": "Asset Dashboard",
+          "slug": "dashboard.asset",
+          "icon": "menu-icon icon-base bx bx-bar-chart-alt-2"
+        }
+      ]
+    },
+    {
+      "name": "Asset Reports",
+      "icon": "menu-icon icon-base bx bx-bar-chart-alt-2",
+      "slug": [
+        "reports/companywiseassets",
+        "reports/branchwiseassets",
+        "reports/locationwiseassets",
+        "reports/brandwiseassets",
+        "reports/vendorwiseassets",
+        "reports/categorywiseassets",
+        "reports/typewiseassets"
+      ],
+      "submenu": [
+        {
+          "url": "/reports/companywiseassets",
+          "name": "Company Wise Assets",
+          "slug": "reports.companywiseassets",
+          "icon": "menu-icon icon-base bx bx-buildings"
+        },
+        {
+          "url": "/reports/branchwiseassets",
+          "name": "Branch Wise Assets",
+          "slug": "reports.branchwiseassets",
+          "icon": "menu-icon icon-base bx bx-git-branch"
+        },
+        {
+          "url": "/reports/locationwiseassets",
+          "name": "Physical Location Wise Assets",
+          "slug": "reports.locationwiseassets",
+          "icon": "menu-icon icon-base bx bx-map"
+        },
+        {
+          "url": "/reports/brandwiseassets",
+          "name": "Brand Wise Assets",
+          "slug": "reports.brandwiseassets",
+          "icon": "menu-icon icon-base bx bx-purchase-tag"
+        },
+        {
+          "url": "/reports/vendorwiseassets",
+          "name": "Vendor Wise Assets",
+          "slug": "reports.vendorwiseassets",
+          "icon": "menu-icon icon-base bx bx-store"
+        },
+        {
+          "url": "/reports/categorywiseassets",
+          "name": "Category Wise Assets",
+          "slug": "reports.categorywiseassets",
+          "icon": "menu-icon icon-base bx bx-category"
+        },
+        {
+          "url": "/reports/typewiseassets",
+          "name": "Type Wise Assets",
+          "slug": "reports.typewiseassets",
+          "icon": "menu-icon icon-base bx bx-layer"
+        }
+      ]
+    },
+    {
+      "name": "Support Tickets",
+      "icon": "menu-icon icon-base bx bx-chat",
+      "slug": [
+        "support-ticket",
+        "dashboard.supportticket"
+      ],
+      "submenu": [
+        {
+          "url": "/support-ticket",
+          "name": "Support Ticket",
+          "slug": "support-ticket",
+          "icon": "menu-icon icon-base bx bx-chat"
+        },
+        {
+          "url": "/dashboard/supportticket",
+          "name": "Ticket Dashboard",
+          "slug": "dashboard.supportticket",
+          "icon": "menu-icon icon-base bx bx-bar-chart-alt-2"
+        }
+      ]
+    },
+    {
+      "name": "Support Ticket Reports",
+      "icon": "menu-icon icon-base bx bx-bar-chart-alt-2",
+      "slug": [
+        "reports/assetwisesupportticket",
+        "reports/branchwisesupportticket",
+        "reports/departmentwisesupportticket",
+        "reports/userwisesupportticket"
+      ],
+      "submenu": [
+        {
+          "url": "/reports/assetwisesupportticket",
+          "name": "All Support Ticket Reports",
+          "slug": "reports.assetwisesupportticket",
+          "icon": "menu-icon icon-base bx bx-wrench"
+        },
+        {
+          "url": "/reports/branchwisesupportticket",
+          "name": "Branch Wise Support Ticket",
+          "slug": "reports.branchwisesupportticket",
+          "icon": "menu-icon icon-base bx bx-git-branch"
+        },
+        {
+          "url": "/reports/departmentwisesupportticket",
+          "name": "Department Wise Support Ticket",
+          "slug": "reports.departmentwisesupportticket",
+          "icon": "menu-icon icon-base bx bx-building"
+        },
+        {
+          "url": "/reports/userwisesupportticket",
+          "name": "User Wise Support Ticket",
+          "slug": "reports.userwisesupportticket",
+          "icon": "menu-icon icon-base bx bx-user"
+        }
+      ]
+    },
+    {
+      "url": "/msu-purchase-orders",
+      "name": "New Purchase Order",
+      "slug": "msu-purchase-orders.index",
+      "icon": "menu-icon icon-base bx bx-receipt",
+      "permission": "msu-purchase-order:view"
+    },
+    {
+      "url": "/msu-grns",
+      "name": "Goods Receipt (GRN)",
+      "slug": "msu-grns.index",
+      "icon": "menu-icon icon-base bx bx-package",
+      "permission": "msu-grn:view"
+    },
+    {
+      "url": "/material-requests",
+      "name": "Material Requests",
+      "slug": "material-requests.index",
+      "icon": "menu-icon icon-base bx bx-list-check"
+    },
+    {
+      "url": "/material-issues",
+      "name": "Material Issues",
+      "slug": "material-issues.index",
+      "icon": "menu-icon icon-base bx bx-export"
+    },
+    {
+      "url": "/msu-work-orders",
+      "name": "Work Order",
+      "slug": "msu-work-orders.index",
+      "icon": "menu-icon icon-base bx bx-briefcase",
+      "permission": "msu-work-order:view"
+    },
+    {
+      "url": "/item-dashboard",
+      "name": "Item Dashboard",
+      "slug": "item-dashboard.index",
+      "icon": "menu-icon icon-base bx bx-pie-chart-alt-2",
+      "permission": "item-dashboard:view"
+    },
+    {
+      "url": "/item-stocks",
+      "name": "Item Stock",
+      "slug": "item-stocks.index",
+      "icon": "menu-icon icon-base bx bx-box"
+    },
+    {
+      "url": "/stock-adjustments",
+      "name": "Stock Adjustments",
+      "slug": "stock-adjustments.index",
+      "icon": "menu-icon icon-base bx bx-adjust"
+    },
+    {
+      "name": "Master",
+      "icon": "menu-icon icon-base bx bx-grid-alt",
+      "slug": [
+        "companies",
+        "branch",
+        "location",
+        "brands",
+        "cost-centres",
+        "department",
+        "designation",
+        "vendor",
+        "item-masters.index",
+        "product-categories",
+        "product-sub-categories",
+        "units",
+        "payment-terms",
+        "miscellaneous-charges",
+        "hsns",
+        "employee-masters",
+        "asset-custodians",
+        "shipping-details"
+      ],
+      "submenu": [
+        {
+          "url": "/companies",
+          "name": "Companies",
+          "slug": "companies",
+          "icon": "menu-icon icon-base bx bx-building-house"
+        },
+        {
+          "url": "/branch",
+          "name": "Branches",
+          "slug": "branch",
+          "icon": "menu-icon icon-base bx bx-map-pin"
+        },
+        {
+          "url": "/location",
+          "name": "Physical Location",
+          "slug": "location",
+          "icon": "menu-icon icon-base bx bx-category-alt"
+        },
+        {
+          "url": "/brands",
+          "name": "Brands",
+          "slug": "brands",
+          "icon": "menu-icon icon-base bx bx-gift"
+        },
+        {
+          "url": "/cost-centres",
+          "name": "Cost Centre",
+          "slug": "cost-centres",
+          "icon": "menu-icon icon-base bx bx-wallet"
+        },
+        {
+          "url": "/designation",
+          "name": "Designation",
+          "slug": "designation",
+          "icon": "menu-icon icon-base bx bx-id-card"
+        },
+        {
+          "url": "/department",
+          "name": "Department",
+          "slug": "department",
+          "icon": "menu-icon icon-base bx bx-group"
+        },
+        {
+          "url": "/vendor",
+          "name": "Vendor",
+          "slug": "vendor",
+          "icon": "menu-icon icon-base bx bx-user-check"
+        },
+        {
+          "url": "/item-masters",
+          "name": "Item Master",
+          "slug": "item-masters.index",
+          "icon": "menu-icon icon-base bx bx-package",
+          "permission": "item-master:view"
+        },
+        {
+          "url": "/product-categories",
+          "name": "Product Category",
+          "slug": "product-categories",
+          "icon": "menu-icon icon-base bx bx-category",
+          "permission": "product-category:view"
+        },
+        {
+          "url": "/product-sub-categories",
+          "name": "Product Sub Category",
+          "slug": "product-sub-categories",
+          "icon": "menu-icon icon-base bx bx-list-ul",
+          "permission": "product-sub-category:view"
+        },
+        {
+          "url": "/units",
+          "name": "Unit",
+          "slug": "units",
+          "icon": "menu-icon icon-base bx bx-ruler",
+          "permission": "unit:view"
+        },
+        {
+          "url": "/payment-terms",
+          "name": "Payment Terms",
+          "slug": "payment-terms",
+          "icon": "menu-icon icon-base bx bx-credit-card",
+          "permission": "payment-term:view"
+        },
+        {
+          "url": "/miscellaneous-charges",
+          "name": "Miscellaneous Charges",
+          "slug": "miscellaneous-charges",
+          "icon": "menu-icon icon-base bx bx-purchase-tag",
+          "permission": "miscellaneous-charge:view"
+        },
+        {
+          "url": "/hsns",
+          "name": "HSN",
+          "slug": "hsns",
+          "icon": "menu-icon icon-base bx bx-barcode",
+          "permission": "hsn:view"
+        },
+        {
+          "url": "/employee-masters",
+          "name": "Employee Master",
+          "slug": "employee-masters",
+          "icon": "menu-icon icon-base bx bx-user",
+          "permission": "employee-master:view"
+        },
+        {
+          "url": "/asset-custodians",
+          "name": "Asset Custodian",
+          "slug": "asset-custodians",
+          "icon": "menu-icon icon-base bx bx-user-pin",
+          "permission": "asset-custodian:view"
+        },
+        {
+          "url": "/shipping-details",
+          "name": "Shipping Details",
+          "slug": "shipping-details",
+          "icon": "menu-icon icon-base bx bx-package",
+          "permission": "shipping-detail:view"
+        }
+      ]
+    },
+    {
+      "name": "Setting",
+      "icon": "menu-icon icon-base bx bx-cog",
+      "slug": [
+        "employees",
+        "roles",
+        "permissions",
+        "branches"
+      ],
+      "submenu": [
+        {
+          "url": "/employees",
+          "name": "User",
+          "slug": "employees"
+        },
+        {
+          "url": "roles",
+          "name": "Roles",
+          "slug": "roles"
+        },
+        {
+          "url": "permissions",
+          "name": "Permissions",
+          "slug": "permissions"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+/* Compact content padding for all modules */
+.content-wrapper > [class*="container-"].container-p-y,
+.layout-navbar-fixed .content-wrapper > [class*="container-"].container-p-y {
+  padding-block-start: 0.5rem !important;
+  padding-block-end: 1rem !important;
+}
+
+.content-wrapper > [class*="container-"] {
+  padding-inline: 0.75rem !important;
+}
+
+@media (min-width: 992px) {
+  .content-wrapper > [class*="container-"] {
+    padding-inline: 1rem !important;
+  }
+}

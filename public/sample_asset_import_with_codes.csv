@@ -1,0 +1,5 @@
+Asset Name,Asset Code,Serial No,Asset Structure,Items Count,Category,Sub Category,Asset Type,Operational Status,Condition,Purchase Date,Purchase Cost,Supplier,Brand,Depreciation Method,Salvage Value,Description
+32 Channel DVR,AC001234,ABCDN454,Single Asset,1,Tangible Assets (Physical),Machinery & Equipment,Server,Working,new,20-Feb-2026,4500,MOHIT COMPUTERS,Samsung,Reducing Balance,450,CCTV recording device
+48 Channel DVR,AC001235,KLROP45454,Single Asset,1,Tangible Assets (Physical),Machinery & Equipment,Network Video Recorder,Working,new,20-Feb-2026,3600,MOHIT COMPUTERS,LG,Reducing Balance,360,High capacity CCTV system
+I Ball 600 VA UPS,AC001236,NKP369,Single Asset,1,Tangible Assets (Physical),CCTV / RADIO / TV,UPS,Working,new,11-Jul-24,2213,MOHIT COMPUTERS,APC,Reducing Balance,221,Uninterruptible Power Supply
+I Ball 600 VA UPS,AC001237,NKP372,Single Asset,1,Tangible Assets (Physical),CCTV / RADIO / TV,UPS,Working,good,11-Jul-24,2213,MOHIT COMPUTERS,APC,Reducing Balance,221,Backup power supply unit
