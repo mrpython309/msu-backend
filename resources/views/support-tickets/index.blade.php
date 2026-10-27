@@ -167,7 +167,6 @@
         <table class="table card-table" id="ticketTable">
             <thead>
                 <tr>
-                    <th>Actions</th>
                     <th>#</th>
                     <th>ID</th>
                     <th>Subject</th>
@@ -178,48 +177,13 @@
                     <th>Due Date</th>
                     <th>Created By</th>
                     <th>Collaborators</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
             <tbody>
                 @forelse($tickets as $ticket)
                 <tr>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn p-0 btn-sm" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('support-ticket.show',$ticket->id) }}">
-                                        <i class="bx bx-show me-1"></i> View
-                                    </a>
-                                </li>
-                                @can('update', $ticket)
-                                
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('support-ticket.edit',$ticket->id) }}">
-                                        <i class="bx bx-edit me-1"></i> Edit
-                                    </a>
-                                </li>
-                             
-                                @endcan
-
-                                @can('delete', $ticket)
-                                <li>
-                                    <form method="POST" action="{{ route('support-ticket.destroy',$ticket->id) }}" class="delete-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="dropdown-item text-danger">
-                                            <i class="bx bx-trash me-1"></i> Delete
-                                        </button>
-                                    </form>
-                                </li>
-                                @endcan
-                            </ul>
-                        </div>
-                    </td>
                     <td>{{ $tickets->firstItem() + $loop->index }}.</td>
                     <td>#{{ $ticket->id }}</td>
 
@@ -249,10 +213,47 @@
                             --
                         @endforelse
                     </td>
+
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn p-0 btn-sm" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('support-ticket.show',$ticket->id) }}">
+                                        <i class="bx bx-show me-1"></i> View
+                                    </a>
+                                </li>
+                                @can('update', $ticket)
+                                
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('support-ticket.edit',$ticket->id) }}">
+                                        <i class="bx bx-edit me-1"></i> Edit
+                                    </a>
+                                </li>
+                             
+                                @endcan
+
+                                @can('delete', $ticket)
+                                <li>
+                                    <form method="POST" action="{{ route('support-ticket.destroy',$ticket->id) }}" class="delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="dropdown-item text-danger">
+                                            <i class="bx bx-trash me-1"></i> Delete
+                                        </button>
+                                    </form>
+                                </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="11" class="text-center py-5 text-muted">
+                    <td colspan="9" class="text-center py-5 text-muted">
                         No tickets found
                     </td>
                 </tr>
@@ -393,8 +394,8 @@ $(function() {
     $('#ticketTable').DataTable({
         pageLength: 10,
         responsive: true,
-        order: [[1, 'desc']],
-        columnDefs: [{ orderable: false, targets: 0 }]
+        order: [[0, 'desc']],
+        columnDefs: [{ orderable: false, targets: -1 }]
     });
 });
 </script>
