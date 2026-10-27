@@ -167,6 +167,7 @@
         <table class="table card-table" id="ticketTable">
             <thead>
                 <tr>
+                    <th>Actions</th>
                     <th>#</th>
                     <th>ID</th>
                     <th>Subject</th>
@@ -177,50 +178,19 @@
                     <th>Due Date</th>
                     <th>Created By</th>
                     <th>Collaborators</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
 
             <tbody>
                 @forelse($tickets as $ticket)
                 <tr>
-                    <td>{{ $tickets->firstItem() + $loop->index }}.</td>
-                    <td>#{{ $ticket->id }}</td>
-
-                    <td>
-                        <strong>{{ $ticket->subject }}</strong>
-                        <div class="text-muted fs-12px">
-                            {{ Str::limit($ticket->description, 60) }}
-                        </div>
-                    </td>
-
-                    <td>{!! $ticket->priority_label !!}</td>
-
-                    <td>{!! $ticket->status_label !!}</td>
-
-                    <td>{{ $ticket->branch?->name ?? '-' }}</td>
-
-                    <td>{{ $ticket->department?->department_name ?? '-' }}</td>
-
-                    <td>{{ optional($ticket->due_date)->format('d M Y') ?? '-' }}</td>
-
-                    <td>{{ $ticket->creator?->name ?? '-' }}</td>
-
-                    <td>
-                        @forelse($ticket->activeAssignments as $collaborator)
-                            <span class="badge bg-label-info">{{ $collaborator->user->name ?? '-' }}</span>
-                        @empty
-                            --
-                        @endforelse
-                    </td>
-
                     <td>
                         <div class="dropdown">
                             <button class="btn p-0 btn-sm" data-bs-toggle="dropdown">
                                 <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
 
-                            <ul class="dropdown-menu dropdown-menu-end">
+                            <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item" href="{{ route('support-ticket.show',$ticket->id) }}">
                                         <i class="bx bx-show me-1"></i> View
@@ -250,10 +220,39 @@
                             </ul>
                         </div>
                     </td>
+                    <td>{{ $tickets->firstItem() + $loop->index }}.</td>
+                    <td>#{{ $ticket->id }}</td>
+
+                    <td>
+                        <strong>{{ $ticket->subject }}</strong>
+                        <div class="text-muted fs-12px">
+                            {{ Str::limit($ticket->description, 60) }}
+                        </div>
+                    </td>
+
+                    <td>{!! $ticket->priority_label !!}</td>
+
+                    <td>{!! $ticket->status_label !!}</td>
+
+                    <td>{{ $ticket->branch?->name ?? '-' }}</td>
+
+                    <td>{{ $ticket->department?->department_name ?? '-' }}</td>
+
+                    <td>{{ optional($ticket->due_date)->format('d M Y') ?? '-' }}</td>
+
+                    <td>{{ $ticket->creator?->name ?? '-' }}</td>
+
+                    <td>
+                        @forelse($ticket->activeAssignments as $collaborator)
+                            <span class="badge bg-label-info">{{ $collaborator->user->name ?? '-' }}</span>
+                        @empty
+                            --
+                        @endforelse
+                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="9" class="text-center py-5 text-muted">
+                    <td colspan="11" class="text-center py-5 text-muted">
                         No tickets found
                     </td>
                 </tr>
@@ -394,8 +393,8 @@ $(function() {
     $('#ticketTable').DataTable({
         pageLength: 10,
         responsive: true,
-        order: [[0, 'desc']],
-        columnDefs: [{ orderable: false, targets: -1 }]
+        order: [[1, 'desc']],
+        columnDefs: [{ orderable: false, targets: 0 }]
     });
 });
 </script>
