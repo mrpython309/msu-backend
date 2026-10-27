@@ -311,6 +311,10 @@ class RoleController extends Controller
             'material-issue',
             'support-ticket',
             'support-tickets',
+            'audit',
+            'audits',
+            'asset-audit',
+            'asset-audits',
         ];
 
         if (in_array($module, $exact, true)) {
@@ -363,6 +367,9 @@ class RoleController extends Controller
 
     public static function permissionNameRank(string $name): int
     {
+        if (str_starts_with($name, 'support-ticket:')) {
+            return 3;
+        }
         if (str_contains($name, ':')) {
             return 2;
         }
@@ -396,6 +403,8 @@ class RoleController extends Controller
             str_starts_with($module, 'purchase-management') => 'Procurement — Dashboard & Reports',
             str_starts_with($module, 'purchase-report') => 'Procurement — Dashboard & Reports',
             str_starts_with($module, 'approval') => 'Procurement — Approval Templates',
+            str_starts_with($module, 'asset-audit') || str_starts_with($module, 'audit') => 'Asset Audit',
+            str_starts_with($module, 'support-ticket') || $module === 'dashboard.supportticket' => 'Support Tickets',
             $module === 'cost-centres' => 'Cost Centres',
             default => ucfirst($module),
         };

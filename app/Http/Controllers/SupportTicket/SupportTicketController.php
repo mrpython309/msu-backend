@@ -110,6 +110,7 @@ class SupportTicketController extends Controller
         $departments=Department::active()->get();
 
         $assets = Asset::VisibleToUser(auth()->user())
+            ->notDisposed()
             ->select('id', 'asset_name', 'serial_no', 'asset_code', 'company_id', 'branch_id', 'department_id')
             ->orderBy('asset_name')
             ->get();
@@ -210,6 +211,12 @@ class SupportTicketController extends Controller
         $branches=Branch::visibleToUser(auth()->user())->Where('id', $supportTicket->branch_id)->active()->get();
 
         $assets = Asset::VisibleToUser(auth()->user())
+            ->where(function ($query) use ($supportTicket) {
+                $query->notDisposed();
+                if ($supportTicket->asset_id) {
+                    $query->orWhere('id', $supportTicket->asset_id);
+                }
+            })
             ->select('id', 'asset_name', 'serial_no', 'asset_code', 'company_id', 'branch_id', 'department_id')
             ->orderBy('asset_name')
             ->get();

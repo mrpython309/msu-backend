@@ -184,6 +184,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('users/{user}/roles', [UserRoleController::class, 'edit'])->name('users.roles.edit')->middleware('permission:users:edit');
     Route::post('users/{user}/roles', [UserRoleController::class, 'update'])->name('users.roles.update')->middleware('permission:users:edit');
 
+    // ========== MOBILE APP MODULE PERMISSIONS ==========
+    Route::get('mobile-permissions', [App\Http\Controllers\MobilePermissionController::class, 'index'])->name('mobile-permissions.index')->middleware('permission:roles:view');
+    Route::post('mobile-permissions/role', [App\Http\Controllers\MobilePermissionController::class, 'updateRolePermissions'])->name('mobile-permissions.update-role')->middleware('permission:roles:edit');
+    Route::post('mobile-permissions/user', [App\Http\Controllers\MobilePermissionController::class, 'updateUserPermissions'])->name('mobile-permissions.update-user')->middleware('permission:users:edit');
+    Route::post('mobile-permissions/user-reset', [App\Http\Controllers\MobilePermissionController::class, 'resetUserPermissions'])->name('mobile-permissions.reset-user')->middleware('permission:users:edit');
+
     // ========== DEALER LOCATION ==========
     Route::prefix('dealer-locations')->name('dealer-locations.')->group(function () {
 
@@ -899,6 +905,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('asset/import', [AssetController::class, 'importAsset'])->name('asset.import.process');
 
     Route::resource('asset', AssetController::class);
+    Route::post('asset/{asset}/audit', [AssetController::class, 'recordAuditWeb'])->name('asset.audit.store');
 
     Route::get('vendor/export', [VendorController::class, 'export'])->name('vendor.export');
     Route::get('vendor/export-pdf', [VendorController::class, 'exportPdf'])->name('vendor.export-pdf');

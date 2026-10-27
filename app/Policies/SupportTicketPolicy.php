@@ -8,6 +8,34 @@ use Illuminate\Auth\Access\Response;
 
 class SupportTicketPolicy
 {
+    public function before(User $user, string $ability): ?bool
+    {
+        if ($user->hasAnyRole(['superadmin', 'Super Admin', 'Admin', 'admin'])) {
+            return true;
+        }
+        return null;
+    }
+
+    public function view(User $user, SupportTicket $ticket): bool
+    {
+        if ($user->hasAnyRole(['superadmin', 'Super Admin', 'Admin', 'admin'])) {
+            return true;
+        }
+
+        if ($ticket->created_by === $user->id) {
+            return true;
+        }
+
+        if ($ticket->isAssignedTo($user)) {
+            return true;
+        }
+
+        if ($user->can('support-ticket:view') || $user->can('support-tickets:view')) {
+            return true;
+        }
+
+        return false;
+    }
 
     public function accept(User $user, SupportTicket $ticket): bool
     {

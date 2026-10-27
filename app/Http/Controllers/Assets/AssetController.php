@@ -911,6 +911,10 @@ class AssetController extends Controller
             'msuGrnItem.grn.purchaseOrder',
             'custodian',
             'auditedBy:id,name',
+            'audits.auditor:id,name',
+            'audits.location',
+            'audits.branch:id,name',
+            'audits.company:id,name',
             'assetType',
             'company',
             'branch',
@@ -944,7 +948,36 @@ class AssetController extends Controller
             ->latest()
             ->get();
 
-        return view('assets.show',compact('asset','tab','assignments','scrollToTabSection'));
+        $locations = $asset->branch_id
+            ? BranchLocation::where('branch_id', $asset->branch_id)->where('status', 'active')->get()
+            : collect();
+
+        return view('assets.show',compact('asset','tab','assignments','scrollToTabSection','locations'));
+    }
+
+    /**
+     * Record a new audit entry from the web application.
+     */
+    public function recordAuditWeb(Request $request, Asset $asset)
+    {
+        $validated = $request->validate([
+            'audit_status' => ['required', 'string', 'in:audited,not_found,audited,found'],
+            'audited_at' => ['required', 'date'],
+            'location_status' => ['nullable', 'string', 'max:50'],
+            'location_id' => ['nullable', 'integer'],
+            'remarks' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $asset->recordAudit((int) auth()->id(), $validated['audit_status'], [
+            'source' => 'web',
+            'audited_at' => $validated['audited_at'],
+            'location_status' => $validated['location_status'] ?? 'matches',
+            'location_id' => $validated['location_id'] ?? $asset->location_id,
+            'remarks' => $validated['remarks'] ?? null,
+        ]);
+
+        return redirect_to_asset_show_section($asset, 'audits')
+            ->with('success', 'Asset audit recorded successfully.');
     }
 
     /**
@@ -1030,6 +1063,7 @@ class AssetController extends Controller
         }
 
          $data=$request->validated();
+         unset($data['asset_code']);
 
          if($request->hasFile('filename') && $request->file('filename')->isValid()){    
 

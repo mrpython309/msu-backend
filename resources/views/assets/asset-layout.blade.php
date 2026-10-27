@@ -705,6 +705,11 @@
           <a class="nav-link @if($tab == 'replacements') active @endif" href="{{ route('asset.show', ['asset' => $asset->id, 'tab' => 'replacements']) }}#replacements-section"><i class="icon-base bx bx-receipt icon-18px me-1_5"></i> Replacement</a>
         </li>
         @endcan
+        @canany(['asset.audit:view', 'asset:view'])
+        <li class="nav-item">
+          <a class="nav-link @if($tab == 'audits') active @endif" href="{{ route('asset.show', ['asset' => $asset->id, 'tab' => 'audits']) }}#audits-section"><i class="icon-base bx bx-check-shield icon-18px me-1_5"></i> Audit History</a>
+        </li>
+        @endcanany
       </ul>
     </div>
     <!--/ Customer Pills -->

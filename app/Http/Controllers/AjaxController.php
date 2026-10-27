@@ -7,6 +7,7 @@ use App\Models\Branch;
 use App\Models\BranchLocation;
 use App\Models\AssetCategory;
 use App\Models\ProductSubCategory;
+use App\AssetStatus;
 use App\Models\Asset;
 use App\Models\AssetType;
 use App\Models\User;
@@ -53,6 +54,7 @@ class AjaxController extends Controller
     public function getAssets($branchId){
 
         $data = Asset::where('branch_id', $branchId)
+            ->notDisposed()
             ->select('id', 'asset_name', 'serial_no', 'asset_code', 'company_id', 'branch_id', 'department_id')
             ->orderBy('asset_name')
             ->get()

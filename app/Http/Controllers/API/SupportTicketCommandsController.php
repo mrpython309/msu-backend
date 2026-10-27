@@ -21,18 +21,16 @@ class SupportTicketCommandsController extends Controller
      */
     public function index(Request $request)
     {
-         if(!$request->ticket_id){   return $this->error('Ticket Id Not Found');  }
+        $ticketId = $request->ticket_id ?? $request->support_ticket_id;
+        if (!$ticketId) {
+            return $this->error('Ticket Id Not Found');
+        }
 
-        $commands = SupportTicketCommand::where('support_ticket_id', $request->ticket_id)->with(['user','user.designation','user.departments'])->OrderBy('created_at', 'desc')->get();
+        $commands = SupportTicketCommand::where('support_ticket_id', $ticketId)
+            ->with(['user', 'user.designation', 'user.departments'])
+            ->orderBy('created_at', 'desc')
+            ->get();
         return $this->success($commands);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -40,6 +38,11 @@ class SupportTicketCommandsController extends Controller
      */
     public function store(Request $request)
     {
+        $ticketId = $request->ticket_id ?? $request->support_ticket_id;
+        if ($ticketId) {
+            $request->merge(['ticket_id' => $ticketId, 'support_ticket_id' => $ticketId]);
+        }
+
         $request->validate(array_merge([
             'ticket_response' => 'nullable|string',
             'voice_note' => 'nullable|file|mimes:webm,mp3,wav,ogg|max:5120',
@@ -54,15 +57,13 @@ class SupportTicketCommandsController extends Controller
             return $this->error('Please enter a response, attach a file, or upload a voice note.');
         }
 
-        $ticket=SupportTicket::find($request->ticket_id);
+        $ticket = SupportTicket::find($ticketId);
 
-        if(!$ticket){
-
+        if (!$ticket) {
             return $this->error('Support Ticket not found');
         }
 
-        if($ticket->status == 'closed'){
-
+        if ($ticket->status == 'closed') {
             return $this->error('Support Ticket is closed');
         }
 
@@ -82,37 +83,28 @@ class SupportTicketCommandsController extends Controller
 
         $command->save();
 
-         $ticketTokens = $ticket->getAssignedAndCreatorDeviceTokens();
+        $ticketTokens = $ticket->getAssignedAndCreatorDeviceTokens();
 
-        if(!empty($ticketTokens)) {
-
-                $title = "New Comment on Ticket";
-
-                $commandedBy=auth()->user()->name;
-
-                $message = "A new comment has been added to ticket #{$ticket->id} by {$commandedBy}. Please review the latest update.";
-
-                $data = [
-                    'type' => 'support_ticket',
-                    'ref_id' => (string)$ticket->id
-                ];
-
-                SendPushNotification::dispatch($ticketTokens, $title, $message, $data);
-
+        if (!empty($ticketTokens)) {
+            $title = "New Comment on Ticket";
+            $commandedBy = auth()->user()->name;
+            $message = "A new comment has been added to ticket #{$ticket->id} by {$commandedBy}. Please review the latest update.";
+            $data = [
+                'type' => 'support_ticket',
+                'ref_id' => (string)$ticket->id
+            ];
+            SendPushNotification::dispatch($ticketTokens, $title, $message, $data);
         }
 
         SupportTicketActivity::create([
-                'support_ticket_id' => $ticket->id,
-                'user_id' => auth()->id(),
-                'event' => 'commented',
-                'meta' => [
-                    'message' => Str::limit($request->ticket_response, 100),
-                ],
-            ]);
+            'support_ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'event' => 'commented',
+            'meta' => [
+                'message' => Str::limit($request->ticket_response, 100),
+            ],
+        ]);
 
         return $this->success($command);
-
     }
-
-    
 }

@@ -11,6 +11,7 @@ use App\Models\SupportTicketStatusLog;
 use Illuminate\Support\Facades\Log;
 use App\Traits\IconTrait;
 use Illuminate\Support\Facades\Gate;
+use App\AssetStatus;
 use App\Models\AssetMaintenance;
 use App\Jobs\SendPushNotification;
 
@@ -191,6 +192,10 @@ class SupportTicket extends Model
 
                         if (!$hasActiveMaintenance) {
                             Asset::where('id', $assetId)
+                                ->where(function ($query) {
+                                    $query->whereNull('status')
+                                        ->orWhere('status', '!=', AssetStatus::DISPOSED->value);
+                                })
                                 ->update(['operational_status' => 'working']);
                         }
                     }

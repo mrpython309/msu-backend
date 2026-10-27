@@ -54,6 +54,7 @@ class AssetPermissionSeeder extends Seeder
             'asset.replacement:view', 'asset.replacement:create', 'asset.replacement:edit', 'asset.replacement:delete',
             'asset.depreciation:view', 
             'dashboard.asset:view',
+            'audit:view', 'audit:create', 'audit:edit', 'audit:delete',
             'indents:view', 'indents:create', 'indents:edit', 'indents:delete', 'indents:approve', 'indents:reject',
             'indent.approve.manager', 'indent.approve.it_head', 'indent.approve.finance',
             'approval-workflows:manage',
