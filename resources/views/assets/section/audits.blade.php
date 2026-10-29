@@ -17,11 +17,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($asset->audits as $index => $audit)
+                    @php
+                        $auditsList = $asset->audits ?? collect();
+                    @endphp
+                    @forelse ($auditsList as $index => $audit)
                         <tr>
                             <td>
                                 <span class="badge badge-center rounded-pill bg-label-secondary font-size-11">
-                                    {{ $asset->audits->count() - $index }}
+                                    {{ $auditsList->count() - $index }}
                                 </span>
                             </td>
 
