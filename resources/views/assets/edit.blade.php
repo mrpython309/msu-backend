@@ -643,15 +643,19 @@
 
 <script>
 
-function syncDisposedOperationalStatus() {
-    const $operational = $('select[name="operational_status"]');
-    if (!$operational.length) {
+function syncDisposedFields() {
+    if ($('select[name="status"]').val() !== 'disposed') {
         return;
     }
-    if ($('select[name="status"]').val() === 'disposed') {
-        $operational.val('disposed');
-        refreshSearchable($operational);
-    }
+
+    ['operational_status', 'condition'].forEach(function (name) {
+        const $field = $('select[name="' + name + '"]');
+        if (!$field.length) {
+            return;
+        }
+        $field.val('disposed');
+        refreshSearchable($field);
+    });
 }
 
 function refreshSearchable($el) {
@@ -1498,12 +1502,12 @@ $('#company_id').on('change', function () {
 $(document).ready(function () {
 
     initSearchableSelects();
-    syncDisposedOperationalStatus();
+    syncDisposedFields();
     rebuildSupplierDatalist();
     rebuildCustodianDatalist();
 
-    $('select[name="status"]').on('change', syncDisposedOperationalStatus);
-    $('select[name="operational_status"]').on('change', function () {
+    $('select[name="status"]').on('change', syncDisposedFields);
+    $('select[name="operational_status"], select[name="condition"]').on('change', function () {
         if ($('select[name="status"]').val() === 'disposed') {
             $(this).val('disposed');
             refreshSearchable($(this));

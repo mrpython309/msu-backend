@@ -24,6 +24,7 @@ use App\Models\Unit;
 use App\AssetOperationalStatus;
 use App\Models\AssetImport as AssetImportModel;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AssetExcelExport;
 use App\Imports\AssetImport;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -237,24 +238,14 @@ class AssetController extends Controller
     {
         $assets = $this->filteredAssets($request)->get();
 
-        $export = new class($assets) implements FromCollection, WithHeadings
-        {
-            public function __construct(private readonly Collection $assets) {}
+        $rows = $assets->values()->map(function (Asset $asset, int $index) {
+            return $this->assetListColumns($asset, $index + 1);
+        });
 
-            public function collection()
-            {
-                return $this->assets->values()->map(function (Asset $asset, int $index) {
-                    return app(AssetController::class)->assetListColumns($asset, $index + 1);
-                });
-            }
-
-            public function headings(): array
-            {
-                return app(AssetController::class)->assetListHeadings();
-            }
-        };
-
-        return Excel::download($export, 'assets-'.now()->format('Ymd_His').'.xlsx');
+        return Excel::download(
+            new AssetExcelExport($rows, $this->assetListHeadings()),
+            'assets-'.now()->format('Ymd_His').'.xlsx'
+        );
     }
 
     public function exportPdf(Request $request, ReportPdfExportService $pdfExport)
@@ -274,26 +265,14 @@ class AssetController extends Controller
     {
         $this->authorizeAsset($asset);
         $asset = $this->assetForDetailExport($asset);
-        $rows = $this->assetAssignmentExportRows($asset);
-
-        $export = new class($rows) implements FromCollection, WithHeadings
-        {
-            public function __construct(private readonly array $rows) {}
-
-            public function collection()
-            {
-                return collect($this->rows);
-            }
-
-            public function headings(): array
-            {
-                return app(AssetController::class)->assetAssignmentExportHeadings();
-            }
-        };
+        $rows = collect($this->assetAssignmentExportRows($asset));
 
         $filename = 'asset-'.preg_replace('/[^\w\-]+/', '-', (string) $asset->asset_code).'.xlsx';
 
-        return Excel::download($export, $filename);
+        return Excel::download(
+            new AssetExcelExport($rows, $this->assetAssignmentExportHeadings()),
+            $filename
+        );
     }
 
     public function exportDetailPdf(Asset $asset, ReportPdfExportService $pdfExport)
@@ -563,7 +542,7 @@ class AssetController extends Controller
             $serial,
             $asset->asset_code ?: '--',
             $asset->asset_name ?: '--',
-            $asset->serial_no ?: '--',
+            (string) ($asset->serial_no ?: '--'),
             $structure,
             (string) ($asset->items_count ?: 1),
             $asset->productCategory?->category_name ?: '--',
@@ -911,10 +890,6 @@ class AssetController extends Controller
             'msuGrnItem.grn.purchaseOrder',
             'custodian',
             'auditedBy:id,name',
-            'audits.auditor:id,name',
-            'audits.location',
-            'audits.branch:id,name',
-            'audits.company:id,name',
             'assetType',
             'company',
             'branch',
@@ -948,36 +923,7 @@ class AssetController extends Controller
             ->latest()
             ->get();
 
-        $locations = $asset->branch_id
-            ? BranchLocation::where('branch_id', $asset->branch_id)->where('status', 'active')->get()
-            : collect();
-
-        return view('assets.show',compact('asset','tab','assignments','scrollToTabSection','locations'));
-    }
-
-    /**
-     * Record a new audit entry from the web application.
-     */
-    public function recordAuditWeb(Request $request, Asset $asset)
-    {
-        $validated = $request->validate([
-            'audit_status' => ['required', 'string', 'in:audited,not_found,audited,found'],
-            'audited_at' => ['required', 'date'],
-            'location_status' => ['nullable', 'string', 'max:50'],
-            'location_id' => ['nullable', 'integer'],
-            'remarks' => ['nullable', 'string', 'max:1000'],
-        ]);
-
-        $asset->recordAudit((int) auth()->id(), $validated['audit_status'], [
-            'source' => 'web',
-            'audited_at' => $validated['audited_at'],
-            'location_status' => $validated['location_status'] ?? 'matches',
-            'location_id' => $validated['location_id'] ?? $asset->location_id,
-            'remarks' => $validated['remarks'] ?? null,
-        ]);
-
-        return redirect_to_asset_show_section($asset, 'audits')
-            ->with('success', 'Asset audit recorded successfully.');
+        return view('assets.show',compact('asset','tab','assignments','scrollToTabSection'));
     }
 
     /**

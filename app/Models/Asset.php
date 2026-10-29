@@ -97,6 +97,7 @@ class Asset extends Model
 
             if ($statusValue === AssetStatus::DISPOSED->value) {
                 $asset->operational_status = AssetOperationalStatus::DISPOSED;
+                $asset->condition = AssetCondition::DISPOSED;
             }
         });
     }
@@ -391,6 +392,9 @@ class Asset extends Model
             case 'poor':
                 return '<span class="badge bg-label-danger me-1">Poor</span>';
 
+            case 'disposed':
+                return '<span class="badge bg-label-secondary me-1">Disposed</span>';
+
             default:
                 return '<span class="badge bg-label-secondary me-1">Unknown</span>';
         }
@@ -599,23 +603,9 @@ class Asset extends Model
     }
 
     /**
-     * Audit history entries for this asset.
+     * Store the latest successful audit without changing other asset columns.
      */
-    public function audits()
-    {
-        return $this->hasMany(AssetAudit::class, 'asset_id')->orderBy('audited_at', 'desc')->orderBy('id', 'desc');
-    }
-
-    public function latestAudit()
-    {
-        return $this->hasOne(AssetAudit::class, 'asset_id')->latestOfMany('audited_at');
-    }
-
-    /**
-     * Store the latest successful audit without changing other asset columns,
-     * and persist an entry in the audit history trail.
-     */
-    public function recordAudit(int $userId, string $status, array $attributes = []): bool
+    public function recordAudit(int $userId, string $status): bool
     {
         $normalized = self::normalizeAuditStatus($status);
 
@@ -623,36 +613,17 @@ class Asset extends Model
             return false;
         }
 
-        $auditDate = isset($attributes['audited_at']) ? \Carbon\Carbon::parse($attributes['audited_at']) : now();
-        $previousStatus = $this->auditStatusLabel();
+        $updated = static::query()->whereKey($this->getKey())->update([
+            'audited_by' => $userId,
+            'audited_at' => now(),
+            'audit_status' => $normalized,
+        ]);
 
-        return (bool) \Illuminate\Support\Facades\DB::transaction(function () use ($userId, $normalized, $auditDate, $attributes, $previousStatus) {
-            $updated = static::query()->whereKey($this->getKey())->update([
-                'audited_by' => $userId,
-                'audited_at' => $auditDate,
-                'audit_status' => $normalized,
-            ]);
-
-            AssetAudit::create([
-                'asset_id' => $this->id,
-                'auditor_id' => $userId,
-                'audit_status' => $normalized === 'audited' ? 'Audited' : 'Not Found',
-                'previous_status' => $previousStatus,
-                'location_status' => $attributes['location_status'] ?? 'matches',
-                'remarks' => $attributes['remarks'] ?? $attributes['notes'] ?? null,
-                'audited_at' => $auditDate,
-                'source' => $attributes['source'] ?? (request()->is('api/*') ? 'mobile_app' : 'web'),
-                'company_id' => $attributes['company_id'] ?? $this->company_id,
-                'branch_id' => $attributes['branch_id'] ?? $this->branch_id,
-                'location_id' => $attributes['location_id'] ?? $this->location_id,
-                'latitude' => $attributes['latitude'] ?? null,
-                'longitude' => $attributes['longitude'] ?? null,
-            ]);
-
+        if ($updated) {
             $this->refresh();
+        }
 
-            return (bool) $updated;
-        });
+        return (bool) $updated;
     }
 
 
