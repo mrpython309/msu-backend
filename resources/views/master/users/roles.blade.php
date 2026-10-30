@@ -43,50 +43,6 @@
         </div>
       </div>
 
-            {{-- Mobile Application Modules Highlighted Section --}}
-      <div class="border rounded-3 mb-4 p-3 shadow-sm" style="background: linear-gradient(135deg, #f0f4ff 0%, #e6edff 100%); border-left: 5px solid #4157E6 !important;">
-        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-          <div class="d-flex align-items-center gap-2">
-            <span class="badge bg-primary px-2 py-1"><i class="bx bx-mobile-alt me-1"></i> Mobile Application Modules</span>
-            <span class="fw-semibold text-dark">Mobile Access Controls</span>
-          </div>
-          <small class="text-muted">Directly controls modules visible on the Mobile Application</small>
-        </div>
-        <div class="row g-2 pt-2">
-          @php
-            $mobileModuleItems = [
-              'dashboard:view' => ['name' => '📱 Mobile Dashboard', 'desc' => 'Dashboard overview and metrics', 'color' => 'primary'],
-              'asset:view' => ['name' => '📦 Mobile Assets', 'desc' => 'Asset list and asset details', 'color' => 'success'],
-              'audit:view' => ['name' => '📋 Mobile Asset Audit', 'desc' => 'QR scanner and audit logs', 'color' => 'warning'],
-              'support-ticket:view' => ['name' => '🎫 Mobile Support Tickets', 'desc' => 'Ticket management module', 'color' => 'info'],
-              'support-ticket:create' => ['name' => '➕ Mobile Create Ticket', 'desc' => 'Allow submitting new tickets', 'color' => 'danger'],
-            ];
-            $assignedMobile = old('permissions', $rolePermissions ?? ($userPermissions ?? []));
-          @endphp
-          @foreach($mobileModuleItems as $mKey => $mInfo)
-            @php
-              $isCheckedMobile = in_array($mKey, $assignedMobile, true);
-            @endphp
-            <div class="col-md-4 col-sm-6">
-              <div class="form-check p-2 bg-white rounded border">
-                <input
-                  type="checkbox"
-                  class="form-check-input permission-checkbox ms-1"
-                  id="mobile-perm-{{ md5($mKey) }}"
-                  name="permissions[]"
-                  value="{{ $mKey }}"
-                  {{ $isCheckedMobile ? 'checked' : '' }}
-                >
-                <label class="form-check-label ms-2" for="mobile-perm-{{ md5($mKey) }}">
-                  <strong class="text-{{ $mInfo['color'] }}">{{ $mInfo['name'] }}</strong>
-                  <small class="d-block text-muted" style="font-size: 0.72rem;">{{ $mInfo['desc'] }}</small>
-                </label>
-              </div>
-            </div>
-          @endforeach
-        </div>
-      </div>
-
       @php
         $sortedPermissions = collect($permissions)->sortKeys();
       @endphp
